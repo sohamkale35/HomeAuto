@@ -1,112 +1,108 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Automation Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            margin: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #welcome-message {
-            transition: opacity 1s ease;
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 30px;
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-        }
-
-        .menu-icon {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1;
-        }
-
-        #dropdown-menu {
-            position: absolute;
-            top: 60px;
-            left: 20px;
-            background-color: white;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: none; /* Initially hidden */
-            z-index: 1000;
-            min-width: 200px;
-        }
-
-        .dropdown-item {
-            padding: 10px 15px;
-            cursor: pointer;
-            display: block;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f0f0f0;
-        }
-    </style>
+    <title>SmartHome Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="menu-icon" onclick="toggleDropdown()">
-        <i class="fas fa-ellipsis-v"></i> <!-- Three Dots Icon -->
+    <div class="container">
+        <header>
+            <h1>SmartHome Dashboard</h1>
+            <div class="dropdown">
+                <button class="menu-btn" onclick="toggleDropdown()"><i class="fas fa-bars"></i></button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Log Out</a>
+                </div>
+            </div>
+            <h2>SmartHome Dashboard</h2>
+            <div class="dropdown">
+                <button class="menu-btn" onclick="toggleDropdown()"><i class="fas fa-bars"></i></button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Log Out</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="total-consumption">
+                <h2>Total Consumption</h2>
+                <p class="energy-value">1620 kWh</p>
+                <div class="energy-graph"></div>
+            </section>
+
+            <section class="controls">
+                <div class="control-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>Lights</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-fire"></i>
+                    <p>Heating</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-snowflake"></i>
+                    <p>Cooling</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Security</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-tv"></i>
+                    <p>TV & PCs</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-utensils"></i>
+                    <p>Kitchen</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-bath"></i>
+                    <p>Bathroom</p>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-car"></i>
+                    <p>Car</p>
+                </div>
+            </section>
+
+            <section class="consumption-by-room">
+                <h2>Consumption by room</h2>
+                <div class="pie-chart"></div>
+                <ul>
+                    <li>Living Room <span>32%</span></li>
+                    <li>Kitchen <span>19%</span></li>
+                    <li>Studio <span>16%</span></li>
+                    <li>Emily's bedroom <span>14%</span></li>
+                    <li>Oliver's bedroom <span>11%</span></li>
+                    <li>Garage <span>8%</span></li>
+                </ul>
+            </section>
+
+            <section class="heating">
+                <h2>Heating</h2>
+                <ul>
+                    <li>Living Room</li>
+                    <li>Emily's bedroom</li>
+                    <li>Oliver's bedroom</li>
+                    <li>Main bedroom</li>
+                    <li>Kitchen</li>
+                    <li>Bathroom</li>
+                </ul>
+                <div class="temperature">
+                    <p>24°C</p>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- Dropdown menu -->
-    <div id="dropdown-menu">
-        <a class="dropdown-item" href="{% url 'homepage' %}">Homepage</a>
-        <a class="dropdown-item" href="{% url 'add_devices' %}">Add Devices</a>
-        <a class="dropdown-item" href="{% url 'energy_consumption' %}">Energy Consumption</a>
-    </div>
-
-    <div id="welcome-message">
-        <h1>Welcome to the Home Automation Dashboard</h1>
-    </div>
-
-    <script>
-        // Function to toggle the dropdown menu visibility
-        function toggleDropdown() {
-            const dropdownMenu = document.getElementById('dropdown-menu');
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // Function to hide the welcome message after 10 seconds
-        setTimeout(function() {
-            const welcomeMessage = document.getElementById('welcome-message');
-            if (welcomeMessage) {
-                welcomeMessage.style.opacity = '0'; // Fade out the message
-                setTimeout(() => {
-                    welcomeMessage.style.display = 'none'; // Remove the message after fading out
-                }, 1000);
-            }
-        }, 10000);
-
-        // Close the dropdown menu if clicked outside of it
-        window.onclick = function(event) {
-            const dropdownMenu = document.getElementById('dropdown-menu');
-            const menuIcon = document.querySelector('.menu-icon');
-            if (!event.target.matches('.menu-icon, .menu-icon *') && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.style.display = 'none'; // Hide the menu if clicked outside
-            }
-        }
-    </script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
 </body>
 </html>
-
-
