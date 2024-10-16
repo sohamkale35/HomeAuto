@@ -1,11 +1,11 @@
 from django.shortcuts import render
 
 # Homepage view
-def index(request):
+def products(request):
     context = {
         'user': request.user,
     }
-    return render(request, 'pages/index.html', context)
+    return render(request, 'pages/products.html', context)
 
 
 
@@ -17,3 +17,5 @@ def energy_consumption(request):
 from django.shortcuts import render
 
 
+def homepage(request):
+    return render(request, 'pages/homepage.html')
