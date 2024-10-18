@@ -7,6 +7,29 @@
 {% block title %}Energy Consumption{% endblock %}
 
 {% block content %}
-<h2>Energy Consumption</h2>
-<p>This is the energy consumption page content.</p>
+<div class="products-row">
+    <button class="cell-more-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="12" cy="5" r="1" />
+            <circle cx="12" cy="19" r="1" />
+        </svg>
+    </button>
+
+    <!-- Making the air conditioning image and text clickable -->
+    <a href="{% url 'add_devices' %}" class="product-cell image" style="text-decoration: none; ">
+        <img src="https://my.sharp/sites/default/files/uploads/2021-06/Picture2.jpg" alt="product">
+        <span>air conditioning</span>
+    </a>
+
+    <div class="product-cell category"><span class="cell-label">Category:</span>Temperature</div>
+    <div class="product-cell status-cell">
+        <span class="cell-label">Status:</span>
+        <span class="status disabled">disabled</span>
+    </div>
+    <div class="product-cell sales"><span class="cell-label">Sales:</span>11</div>
+    <div class="product-cell stock"><span class="cell-label">Stock:</span>36</div>
+    <div class="product-cell price"><span class="cell-label">Price:</span>$560</div>
+</div>
+
 {% endblock %}

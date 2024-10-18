@@ -33,25 +33,7 @@
   --c-text-secondary: var(--c-gray-200);
   --c-text-tertiary: var(--c-gray-500);
 }
-.mode-switch {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  color: var(--app-content-main-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: 8px;
-  cursor: pointer;
-}
-.mode-switch .moon {
-  fill: var(--app-content-main-color);
-}
 
-.mode-switch.active .moon {
-  fill: none;
-}
 
 body {
   line-height: 1.5;
