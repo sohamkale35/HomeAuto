@@ -1,41 +1,87 @@
-// static/js/script.js
+let currentSetpoint = null;
+let temperatureDisplayInterval = null;
 
-// Function to fetch temperature data from the server
-function fetchTemperature() {
-    fetch('devices/get_temperature/')
-        .then(response => {
-            // Check if the response is ok (status 200-299)
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // Parse the JSON from the response
-        })
-        .then(data => {
-            // Update the temperature display with the fetched data
-            document.getElementById('temperature-display').innerText = 
-                'Temperature: ' + data.temperature + ' °C';
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the fetch
-            console.error('Error fetching temperature data:', error);
-            document.getElementById('temperature-display').innerText = 
-                'Error fetching data. Please try again.';
-        });
-}
-
-// Function to start continuous fetching of temperature data
-function startContinuousFetching() {
-    // Fetch temperature immediately on load
-    fetchTemperature();
-    
-    // Set an interval to fetch temperature every 5 seconds (5000 ms)
-    setInterval(fetchTemperature, 2000); // Adjust the interval as needed
-}
-
-// Event listener to trigger continuous fetching when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    startContinuousFetching(); // Start fetching temperature data continuously
+    const tempButton = document.getElementById('temperatureButton');
+    const setpointButton = document.getElementById('setpointButton');
+
+    tempButton.addEventListener('click', function() {
+        const ipAddress = prompt("Enter the IP address of the sensor (or leave blank for random data):", "192.168.1.100");
+        const protocol = prompt("Enter the protocol (e.g., HTTP, MQTT):", "HTTP");
+
+        if (ipAddress) {
+            alert("Attempting to connect to sensor at IP: " + ipAddress + " using protocol: " + protocol);
+            fetch('devices/get_temperature/')
+                .then(response => response.json())
+                .then(data => {
+                    const temperatureDisplay = document.getElementById('temperatureDisplay');
+                    temperatureDisplay.textContent = 'Temperature: ' + data.temperature + ' °C (simulated)';
+                })
+                .catch(error => console.error('Error fetching temperature:', error));
+        } else {
+            simulateRandomTemperature();
+        }
+    });
+
+    setpointButton.addEventListener('click', function() {
+        const setpoint = prompt("Enter the desired temperature setpoint:", "25");
+
+        if (setpoint !== null && !isNaN(setpoint)) {
+            currentSetpoint = parseFloat(setpoint);
+            alert("Setpoint set to: " + currentSetpoint + " °C");
+            fluctuateAroundSetpoint();
+        }
+    });
+
+    function fluctuateAroundSetpoint() {
+        clearInterval(temperatureDisplayInterval);
+
+        // Define the range around the setpoint
+        const range = 5; // Adjust this value to change the fluctuation range
+
+        // Create an array of 5 readings based on the current setpoint
+        const readings = [
+            (Math.random() * (currentSetpoint - (currentSetpoint - range * 2)) + (currentSetpoint - range)).toFixed(2), // Farthest
+            (Math.random() * (currentSetpoint - (currentSetpoint - range)) + currentSetpoint).toFixed(2),
+            (Math.random() * (currentSetpoint + range - currentSetpoint) + currentSetpoint).toFixed(2),
+            (Math.random() * (currentSetpoint + range - (currentSetpoint + range)) + (currentSetpoint + range)).toFixed(2),
+            currentSetpoint.toFixed(2) // Setpoint
+        ];
+
+        let reachedSetpoint = false; // To track if setpoint has been reached
+
+        temperatureDisplayInterval = setInterval(() => {
+            const temperatureDisplay = document.getElementById('temperatureDisplay');
+
+            // Check if the setpoint has been reached
+            if (!reachedSetpoint) {
+                const randomIndex = Math.floor(Math.random() * readings.length);
+                const currentReading = readings[randomIndex];
+
+                if (currentReading == currentSetpoint.toFixed(2)) {
+                    reachedSetpoint = true; // Setpoint reached, stop fluctuating
+                    temperatureDisplay.textContent = 'Temperature: ' + currentReading + ' °C (Setpoint reached)';
+                } else {
+                    temperatureDisplay.textContent = 'Temperature: ' + currentReading + ' °C (fluctuating)';
+                }
+            }
+        }, 2000); // Update every 5 seconds
+    }
+
+    function simulateRandomTemperature() {
+        const temperatureDisplay = document.getElementById('temperatureDisplay');
+        clearInterval(temperatureDisplayInterval);
+
+        temperatureDisplayInterval = setInterval(() => {
+            const simulatedTemperature = (Math.random() * (30 - 20) + 20).toFixed(2);
+            temperatureDisplay.textContent = 'Temperature: ' + simulatedTemperature + ' °C (random)';
+        }, 2000);
+    }
+
+    // Start with random readings until a setpoint is given
+    simulateRandomTemperature();
 });
+
 
 
 
